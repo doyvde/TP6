@@ -36,9 +36,9 @@ void initAdjGraphe(GRAPHE *G);
 void litGraphe(const char *adr, GRAPHE *G, int capacity[MAX_NODES][MAX_NODES]);
 void afficheGraphe(GRAPHE G);
 int min(int x, int y);
-void enqueue(int x);
+int enqueue(int x,int tail);
 int dequeue();
-int bfs(int start, int target,int capacity[MAX_NODES][MAX_NODES]);
-int fordFulkerson(int source, int sink,int capacity[MAX_NODES][MAX_NODES]);
+int bfs(int start, int target,int capacity[MAX_NODES][MAX_NODES],int tail);
+int fordFulkerson(int source, int sink,int capacity[MAX_NODES][MAX_NODES],int tail);
 
 #endif //TP6_MABIBLIO_H

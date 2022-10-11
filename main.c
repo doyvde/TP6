@@ -11,7 +11,7 @@ int n;
 int flow[MAX_NODES][MAX_NODES];
 int color[MAX_NODES];
 int pred[MAX_NODES];
-int head, tail;
+int head;
 int q[MAX_NODES + 2];
 
 //initialisation de la table d’adjacence : toutes les listes chainées sont vides
@@ -38,12 +38,18 @@ void litGraphe(const char *adr, GRAPHE *G, int capacity[MAX_NODES][MAX_NODES]){
     }
 
     fscanf(f,"%d",&(G->nbSommets));
+    temp=G->nbSommets;
+    for (int i = 0; i < temp; ++i) {
+        for (int j = 0; j < temp ; ++j) {
+            capacity[i][j]=0;
+        }
 
+    }
     initAdjGraphe(G);
     //fscanf(f,"%c",&ns1);
     fscanf(f," %c %c %c %c %c %c %c",&ns1,&ns2,&ns3,&ns4,&ns5,&ns6,&ns7);
     printf("%c %c %c %c %c %c %c \n",ns1,ns2,ns3,ns4,ns5,ns6,ns7);
-    temp=G->nbSommets;
+
     while(nbArcs!=temp){
         fscanf(f,"%d %d %d %d %d %d %d",&s1,&s2,&s3,&s4,&s5,&s6,&s7);
         printf("%d %d %d %d %d %d %d \n",s1,s2,s3,s4,s5,s6,s7);
@@ -77,10 +83,11 @@ int min(int x, int y) {
     return x < y ? x : y;
 }
 
-void enqueue(int x) {
+int enqueue(int x,int tail) {
     q[tail] = x;
     tail++;
     color[x] = B;
+    return tail;
 }
 
 int dequeue() {
@@ -91,19 +98,19 @@ int dequeue() {
 }
 
 // Using BFS as a searching algorithm
-int bfs(int start, int target,int capacity[MAX_NODES][MAX_NODES]) {
+int bfs(int start, int target,int capacity[MAX_NODES][MAX_NODES],int tail) {
     int u, v;
     for (u = 0; u < n; u++) {
         color[u] = A;
     }
     head = tail = 0;
-    enqueue(start);
+    tail=enqueue(start,tail);
     pred[start] = -1;
     while (head != tail) {
         u = dequeue();
         for (v = 0; v < n; v++) {
             if (color[v] == A && capacity[u][v] - flow[u][v] > 0) {
-                enqueue(v);
+                tail=enqueue(v,tail);
                 pred[v] = u;
             }
         }
@@ -112,7 +119,7 @@ int bfs(int start, int target,int capacity[MAX_NODES][MAX_NODES]) {
 }
 
 // Applying fordfulkerson algorithm
-int fordFulkerson(int source, int sink,int capacity[MAX_NODES][MAX_NODES]) {
+int fordFulkerson(int source, int sink,int capacity[MAX_NODES][MAX_NODES],int tail) {
     int i, j, u;
     int max_flow = 0;
     for (i = 0; i < n; i++) {
@@ -122,7 +129,7 @@ int fordFulkerson(int source, int sink,int capacity[MAX_NODES][MAX_NODES]) {
     }
 
     // Updating the residual values of edges
-    while (bfs(source, sink,capacity)) {
+    while (bfs(source, sink,capacity,tail)) {
         int increment = O;
         for (u = n - 1; pred[u] >= 0; u = pred[u]) {
 
@@ -149,7 +156,7 @@ int main() {
 
     GRAPHE G;// declaration du graphe
     int capacity[MAX_NODES][MAX_NODES];
-
+    int tail;
     litGraphe("graphe1.txt", &G,capacity);// lecture du fichier et creation du graphe sous morme matricielle et de liste
     afficheGraphe(G);//affichage des donnes du graphe
 
@@ -158,6 +165,6 @@ int main() {
 
 
 
-    printf("Flot Maximal: %d\n", fordFulkerson(start, fin,capacity));
+    printf("Flot Maximal: %d\n", fordFulkerson(start, fin,capacity,tail));
 }
 
