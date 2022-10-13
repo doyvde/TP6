@@ -5,6 +5,7 @@
 ///source : https://openclassrooms.com/forum/sujet/implementation-algorithme-de-dijkstra
 ///source : https://www.programiz.com/dsa/ford-fulkerson-algorithm
 ///source : https://www.programiz.com/c-programming/c-pointer-functions
+///Mon git: https://github.com/doyvde/TP6.git
 
 int main() {
 
