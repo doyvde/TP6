@@ -7,7 +7,9 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <stdbool.h>
+#define N 7
+#define INF 9999999
 #define A 0
 #define B 1
 #define C 2
@@ -37,6 +39,8 @@ int min(int x, int y);
 int enqueue(int x,int tail,int q[MAX_NODES + 2],int color[MAX_NODES]);
 int dequeue(int q[MAX_NODES + 2],int color[MAX_NODES],int* head);
 int bfs(int start, int target,int capacity[MAX_NODES][MAX_NODES],int tail,int n,int q[MAX_NODES + 2],int flow[MAX_NODES][MAX_NODES],int color[MAX_NODES],int pred[MAX_NODES],int head);
-int fordFulkerson(int source, int sink,int capacity[MAX_NODES][MAX_NODES],int tail,int n,int q[MAX_NODES + 2],int flow[MAX_NODES][MAX_NODES],int color[MAX_NODES],int pred[MAX_NODES],int head);
+int fordFulkersonBFS(int source, int sink,int capacity[MAX_NODES][MAX_NODES],int tail,int n,int q[MAX_NODES + 2],int flow[MAX_NODES][MAX_NODES],int color[MAX_NODES],int pred[MAX_NODES],int head);
+int dfs(int s, int t, int minimum,int Flow[MAX_NODES][MAX_NODES],bool visited[MAX_NODES],int graph[MAX_NODES][MAX_NODES]);
+int fordFulkersonDFS(int s ,int t,bool visited[MAX_NODES],int Flow[MAX_NODES][MAX_NODES],int graph[MAX_NODES][MAX_NODES]);
 
 #endif //TP6_MABIBLIO_H

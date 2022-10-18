@@ -57,7 +57,7 @@ void litGraphe(const char *adr, GRAPHE *G, int capacity[MAX_NODES][MAX_NODES]){
 // affichage d’un graphe : le nombre de sommets, puischaque arc pondéré : (sommet_1, sommet_2, poids)
 void afficheGraphe(GRAPHE G){
     int j;
-    printf("\nNb sommets: %d\n", G.nbSommets);
+    printf("Nb sommets: %d\n", G.nbSommets);
 
     for(j = 0; j < G.nbSommets; j++){
         MAILLON* tmp = G.Adj[j];
@@ -108,7 +108,7 @@ int bfs(int start, int target,int capacity[MAX_NODES][MAX_NODES],int tail,int n,
 }
 
 // Applying fordfulkerson algorithm
-int fordFulkerson(int source, int sink,int capacity[MAX_NODES][MAX_NODES],int tail,int n,int q[MAX_NODES + 2],int flow[MAX_NODES][MAX_NODES],int color[MAX_NODES],int pred[MAX_NODES],int head) {
+int fordFulkersonBFS(int source, int sink,int capacity[MAX_NODES][MAX_NODES],int tail,int n,int q[MAX_NODES + 2],int flow[MAX_NODES][MAX_NODES],int color[MAX_NODES],int pred[MAX_NODES],int head) {
     int i, j, u;
     int max_flow = 0;
     for (i = 0; i < n; i++) {
@@ -141,5 +141,54 @@ int fordFulkerson(int source, int sink,int capacity[MAX_NODES][MAX_NODES],int ta
     return max_flow;
 }
 
+int dfs(int s, int t, int minimum,int Flow[MAX_NODES][MAX_NODES],bool visited[MAX_NODES],int graph[MAX_NODES][MAX_NODES]) {
+    visited[s] = true;
+    int sent;
+    // if source and sink is same
+    if (s == t)
+        return minimum;
+    for (int i = 0; i < N; i++) {
+        int flow_capacity = graph[s][i] - Flow[s][i];
+        if (!visited[i] && flow_capacity > 0) {
+            // find min capacity in dfs path
+            int min1=min(minimum, flow_capacity);
+            if (sent = dfs (i, t,min1,Flow,visited,graph)) {
+                // adjust the capacity
+                Flow[s][i] += sent;
+                Flow[i][s] -= sent;
+                return sent;
+            }
+        }
+    }
+    return false;
+}
+
+int fordFulkersonDFS(int s ,int t,bool visited[MAX_NODES],int Flow[MAX_NODES][MAX_NODES],int graph[MAX_NODES][MAX_NODES]) {
+
+
+    for (int i = 0; i < MAX_NODES; ++i) {
+        for (int j = 0; j < MAX_NODES ; ++j) {
+            Flow[i][j]=0;
+        }
+    }
+    // initialize visited array false initially
+    for (int k = 0; k < MAX_NODES; ++k) {
+        visited[k]=false;
+    }
+
+    int max_flow = 0;
+    int sent;
+    // while ther is augmenting path , from s and t
+    // with positive flow capacity
+    while (sent = dfs(s, t, INF,Flow,visited,graph)) {
+        max_flow += sent;
+        // reset visited array , for searching next path
+        for (int l = 0; l < MAX_NODES; ++l) {
+            visited[l]=false;
+        }
+    }
+    return max_flow;
+
+}
 
 
